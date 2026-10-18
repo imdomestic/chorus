@@ -1,0 +1,39 @@
+name: Vex build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TMPDIR: ${{ github.workspace }}/.work/tmp
+      JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=${{ github.workspace }}/.work/tmp
+      CI: "true"
+    steps:
+      - name: Prepare temporary directory
+        run: mkdir -p "$GITHUB_WORKSPACE/.work/tmp"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          clean: false
+      - name: Prepare build temporary directory
+        run: mkdir -p "$GITHUB_WORKSPACE/.work/tmp"
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: gradle
+      - name: Build Fabric project
+        run: JDK21="$JAVA_HOME" ./gradlew :fabric:assemble --no-daemon
+      - uses: imdomestic/vex-action@bbee986ecdc7860b25764d0e0275e2cd3adc776d
+        with:
+          mode: build
+          artifact: vex-build

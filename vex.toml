@@ -1,0 +1,25 @@
+schema = 1
+
+[minecraft]
+version = "26.3"
+java = 25
+
+[loaders.fabric]
+loader_version = "0.19.5"
+build = ["./gradlew", ":fabric:assemble", "--no-daemon"]
+agent = true
+
+[[loaders.fabric.files]]
+glob = "fabric/build/libs/*.jar"
+exclude = ["*-sources.jar", "*-dev*.jar", "*-javadoc.jar"]
+side = "both"
+
+[[loaders.fabric.deps]]
+url = "https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/0.161.0+26.3/fabric-api-0.161.0+26.3.jar"
+sha1 = "53f9ee02c3702734d90520aa8c9719bf0e1c8d4f"
+sha256 = "86f16178a3cecc887a85a4cfe9a79d92fa7341d8f39b5951a4d6ad800ab657a6"
+sha512 = "ed6b2586d6fde11fde8472f5a527c51e99b67026e46f94d4bfd85e7e28ce5ee299173ee16ad576ceb51f39f98d30a811086a6deb1a86a524859cc16e12da109d"
+side = "both"
+
+[rooms]
+memory = "4G"
